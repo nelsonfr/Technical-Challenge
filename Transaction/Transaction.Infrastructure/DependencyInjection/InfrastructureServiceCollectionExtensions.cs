@@ -1,0 +1,27 @@
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection; 
+using Microsoft.EntityFrameworkCore;
+using Transaction.Infrastructure.DbContext;
+using Transaction.Domain.Repositories;
+using Transaction.Infrastructure.Repositories;
+using Transaction.Application;
+
+namespace Transaction.Infrastructure.DependencyInjection
+{
+    public static class InfrastructureServiceCollectionExtensions
+    {
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+        {
+            var conn = config.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<TransactionDbContext>(options =>
+                options.UseNpgsql(conn));
+
+            services.AddScoped<ITransactionDbContext>(provider =>
+                provider.GetRequiredService<TransactionDbContext>());
+
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
+            return services;
+        }
+    }
+}
