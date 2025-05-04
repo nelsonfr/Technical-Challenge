@@ -9,7 +9,7 @@ namespace Transaction.Domain.Entities
 {
     public class TransactionEntity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public int TransferTypeId { get; set; }
         public Status Status { get; set; }

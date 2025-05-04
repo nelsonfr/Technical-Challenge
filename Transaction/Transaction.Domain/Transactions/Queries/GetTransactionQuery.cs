@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Transaction.Domain.Entities;
 
-namespace Transaction.Application.DTOs
+namespace Transaction.Domain.Transactions.Queries
 {
-    public class RetrieveTransactionDTO
+    public class GetTransactionQuery
     {
         public Guid TransactionExternalId { get; set; }
         public DateTime CreatedAt { get; set; }

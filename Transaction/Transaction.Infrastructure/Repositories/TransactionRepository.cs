@@ -1,30 +1,40 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transaction.Application;
 using Transaction.Domain.Entities;
 using Transaction.Domain.Repositories;
 
 namespace Transaction.Infrastructure.Repositories
 {
-    public class TransactionRepository(ITransactionRepository transactionRepository) : ITransactionRepository
+    public class TransactionRepository(ITransactionDbContext dbContext) : ITransactionRepository
     {
-        private readonly ITransactionRepository _transactionRepository = transactionRepository;
+        private readonly ITransactionDbContext _dbContext = dbContext;
 
-        public Task AddAsync(TransactionEntity entity)
+        public async Task<Guid> AddAsync(TransactionEntity entity, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _dbContext.Transactions.Add(entity);
+            await _dbContext.SaveNewChangesAsync(cancellationToken);
+            return entity.Id;
+            
         }
 
-        public Task<IEnumerable<TransactionEntity>> GetAllAsync()
+        public async Task<IEnumerable<TransactionEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Transactions.ToListAsync(cancellationToken);
         }
 
-        public Task<TransactionEntity?> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<TransactionEntity>> GetAllByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Transactions.Where(x => x.Id == id).ToListAsync(cancellationToken);
+        }
+
+        public async Task<TransactionEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Transactions.FindAsync(id, cancellationToken);
         }
 
         public void Remove(TransactionEntity entity)

@@ -9,6 +9,6 @@ namespace Transaction.Domain.Repositories
 {
     public interface ITransactionRepository: IRepository<TransactionEntity>
     {
-        
+        Task<IEnumerable<TransactionEntity>> GetAllByIdAsync(Guid id, CancellationToken cancellationToken);
     }
 }
