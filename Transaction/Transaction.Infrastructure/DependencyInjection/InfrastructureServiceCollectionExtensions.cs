@@ -7,6 +7,8 @@ using Transaction.Infrastructure.Repositories;
 using Transaction.Application;
 using Transaction.Domain.Transactions;
 using Transaction.Infrastructure.Factories;
+using Transaction.Application.Messaging;
+using Transaction.Infrastructure.Messaging;
 
 namespace Transaction.Infrastructure.DependencyInjection
 {
@@ -23,6 +25,9 @@ namespace Transaction.Infrastructure.DependencyInjection
                 provider.GetRequiredService<TransactionDbContext>());
 
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+            services.AddScoped<IKafkaProducer, TransactionProducer>();
+            services.AddScoped<IKafkaConsumer, TransactionConsumer>();
 
             services.AddSingleton<ITransactionFactory, TransactionFactory>();
 

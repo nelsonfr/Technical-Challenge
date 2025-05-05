@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Transaction.Infrastructure.Messaging
+namespace Transaction.Application.Messaging
 {
     public interface IKafkaProducer
     {
