@@ -1,6 +1,8 @@
 using FluentMediator;
 using Transaction.API.Extensions.Middleware;
 using Transaction.Infrastructure.DependencyInjection;
+using Transaction.Application.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,11 +11,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Adds the different layers
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddFluentMediator(builder =>
-builder.On<>
-    );
 
 var app = builder.Build();
 

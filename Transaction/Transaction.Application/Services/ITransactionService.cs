@@ -10,7 +10,7 @@ namespace Transaction.Application.Services
 {
     public interface ITransactionService
     {
-        Task<CreateTransactionDTO> CreateTransaction(CreateTransactionDTO transactionDTO);
+        Task<Guid> CreateTransaction(CreateTransactionDTO transactionDTO);
         Task<TransactionDTO> GetTransaction(RetrieveTransactionDTO retrieveTransactionDTO);
     }
 }

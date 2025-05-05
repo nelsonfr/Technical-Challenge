@@ -15,7 +15,7 @@ namespace Transaction.Application.ViewModels
         public int TransferTypeId { get; set; }
         public decimal Value { get; set; }
 
-        public TransactionDTO FromEntity(TransactionEntity transactionEntityDto)
+        public static TransactionDTO FromEntity(TransactionEntity transactionEntityDto)
         {
             return new TransactionDTO
             {
@@ -25,5 +25,6 @@ namespace Transaction.Application.ViewModels
                 TransferTypeId = transactionEntityDto.TransferTypeId,
                 Value = transactionEntityDto.Value,
             };
+        }
     }
 }

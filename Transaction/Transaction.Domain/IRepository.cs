@@ -11,7 +11,7 @@ namespace Transaction.Domain
         Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken);
         Task<Guid> AddAsync(TEntity entity, CancellationToken cancellationToken);
-        void Update(TEntity entity);
+        Task Update(TEntity entity);
         void Remove(TEntity entity);
     }
 }

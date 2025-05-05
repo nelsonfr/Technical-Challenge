@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Transaction.Domain.Transactions.Queries
 {
-    public class GetTransactionQuery
+    public class GetTransactionQuery(Guid transactionExternalId, DateTime createdAt)
     {
-        public Guid TransactionExternalId { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public Guid TransactionExternalId { get; set; } = transactionExternalId;
+        public DateTime CreatedAt { get; set; } = createdAt;
     }
 }

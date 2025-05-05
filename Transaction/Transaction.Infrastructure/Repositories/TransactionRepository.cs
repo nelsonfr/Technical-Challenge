@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Transaction.Application;
 using Transaction.Domain.Entities;
 using Transaction.Domain.Repositories;
+using Transaction.Domain.Exceptions;
 
 namespace Transaction.Infrastructure.Repositories
 {
@@ -27,7 +28,7 @@ namespace Transaction.Infrastructure.Repositories
             return await _dbContext.Transactions.ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TransactionEntity>> GetAllByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<IEnumerable<TransactionEntity>> GetAllByIdAsync(Guid id,  CancellationToken cancellationToken)
         {
             return await _dbContext.Transactions.Where(x => x.Id == id).ToListAsync(cancellationToken);
         }
@@ -42,9 +43,15 @@ namespace Transaction.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(TransactionEntity entity)
+        public async Task Update(TransactionEntity entity)
         {
-            throw new NotImplementedException();
+            var transaction = await _dbContext.Transactions.FirstOrDefaultAsync(x => x.Id == entity.Id) ?? throw new TransactionNotFoundException(entity.Id, entity.CreatedAt);
+            transaction.TransferTypeId = entity.TransferTypeId;
+            transaction.Status = entity.Status;
+
+            await _dbContext.SaveNewChangesAsync(CancellationToken.None);
+
+            
         }
     }
 }

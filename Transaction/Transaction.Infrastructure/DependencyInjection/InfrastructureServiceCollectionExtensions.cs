@@ -5,6 +5,8 @@ using Transaction.Infrastructure.DbContext;
 using Transaction.Domain.Repositories;
 using Transaction.Infrastructure.Repositories;
 using Transaction.Application;
+using Transaction.Domain.Transactions;
+using Transaction.Infrastructure.Factories;
 
 namespace Transaction.Infrastructure.DependencyInjection
 {
@@ -21,6 +23,9 @@ namespace Transaction.Infrastructure.DependencyInjection
                 provider.GetRequiredService<TransactionDbContext>());
 
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+            services.AddSingleton<ITransactionFactory, TransactionFactory>();
+
             return services;
         }
     }

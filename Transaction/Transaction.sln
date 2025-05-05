@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35828.75 d17.13
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.API", "Transaction.API\Transaction.API.csproj", "{52763295-0ACB-4D8A-8105-1737C7816741}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Domain", "Transaction.Domain\Transaction.Domain.csproj", "{2AA0E65A-FC57-4D0A-923F-4C070B0DAC49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Infrastructure", "Transaction.Infrastructure\Transaction.Infrastructure.csproj", "{989C62CE-8202-4F55-90CA-2E439E00594F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntiFraudService", "AntiFraudService\AntiFraudService.csproj", "{3F1E3CE3-C8B1-4B37-A0C8-DD0E6A829551}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{989C62CE-8202-4F55-90CA-2E439E00594F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{989C62CE-8202-4F55-90CA-2E439E00594F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{989C62CE-8202-4F55-90CA-2E439E00594F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F1E3CE3-C8B1-4B37-A0C8-DD0E6A829551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F1E3CE3-C8B1-4B37-A0C8-DD0E6A829551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F1E3CE3-C8B1-4B37-A0C8-DD0E6A829551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F1E3CE3-C8B1-4B37-A0C8-DD0E6A829551}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

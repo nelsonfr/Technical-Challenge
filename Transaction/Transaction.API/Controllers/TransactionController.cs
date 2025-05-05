@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Transaction.Application.ViewModels;
 using Serilog;
 using Transaction.Application.DTOs;
+using Transaction.Application.Services;
 
 namespace Transaction.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class TransactionController(ITransactionService transactionService) : ControllerBase
     {
         [HttpPost]
         [ProducesResponseType(typeof(CreateTransactionDTO), StatusCodes.Status200OK)]
@@ -16,7 +17,7 @@ namespace Transaction.API.Controllers
         {
             try
             {
-                return Ok();
+                return Ok(await transactionService.CreateTransaction(createTransactionDTO));
             }
             catch(Exception ex)
             {
@@ -30,7 +31,7 @@ namespace Transaction.API.Controllers
         {
             try
             {
-                return Ok();
+                return Ok(await transactionService.GetTransaction(retrieveTransactionDTO));
             }
             catch (Exception ex)
             {
