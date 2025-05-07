@@ -8,6 +8,6 @@ namespace Transaction.Application.Messaging
 {
     public interface IKafkaConsumer
     {
-        Task StartConsumingAsync(CancellationToken cancellationToken);
+        MessageResult Consume();
     }
 }

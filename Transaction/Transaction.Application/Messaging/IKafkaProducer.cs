@@ -8,6 +8,6 @@ namespace Transaction.Application.Messaging
 {
     public interface IKafkaProducer
     {
-        Task PublishAsync(string topic, string message);
+        Task ProduceAsync(string topic, object message);
     }
 }

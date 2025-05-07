@@ -9,6 +9,8 @@ using Transaction.Domain.Transactions;
 using Transaction.Infrastructure.Factories;
 using Transaction.Application.Messaging;
 using Transaction.Infrastructure.Messaging;
+using Microsoft.Extensions.Options;
+
 
 namespace Transaction.Infrastructure.DependencyInjection
 {
@@ -26,8 +28,10 @@ namespace Transaction.Infrastructure.DependencyInjection
 
             services.AddScoped<ITransactionRepository, TransactionRepository>();
 
-            services.AddScoped<IKafkaProducer, TransactionProducer>();
-            services.AddScoped<IKafkaConsumer, TransactionConsumer>();
+            services.Configure<KafkaSettings>(config.GetSection("Kafka"));
+
+            services.AddSingleton<IKafkaProducer, KafkaProducer>();
+            services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
 
             services.AddSingleton<ITransactionFactory, TransactionFactory>();
 
