@@ -28,10 +28,7 @@ namespace Transaction.Infrastructure.DependencyInjection
 
             services.AddScoped<ITransactionRepository, TransactionRepository>();
 
-            services.Configure<KafkaSettings>(config.GetSection("Kafka"));
-
             services.AddSingleton<IKafkaProducer, KafkaProducer>();
-            services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
 
             services.AddSingleton<ITransactionFactory, TransactionFactory>();
 

@@ -8,7 +8,8 @@ using Transaction.Domain.Entities;
 namespace Transaction.Domain.Repositories
 {
     public interface ITransactionRepository: IRepository<TransactionEntity>
-    {
-        Task<IEnumerable<TransactionEntity>> GetAllByIdAsync(Guid id, CancellationToken cancellationToken);
+    {       
+        Task<IEnumerable<TransactionEntity>> GetAllByTargetIdAsync(Guid targetId, CancellationToken cancellationToken);
+        Task<IEnumerable<TransactionEntity>> GetAllBySourceIdAsync(Guid sourceId, CancellationToken cancellationToken);
     }
 }

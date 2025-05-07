@@ -15,7 +15,7 @@ namespace Transaction.Application.Handlers
         public async Task HandleTransactionCreatedEvent(TransactionCreatedEvent transactionCreatedEvent)
         {
             var eventMessage = JsonConvert.SerializeObject(transactionCreatedEvent);
-            await producer.ProduceAsync("transactions-topic", eventMessage);
+            await producer.ProduceAsync("transaction-created", eventMessage);
         }
     }
 }

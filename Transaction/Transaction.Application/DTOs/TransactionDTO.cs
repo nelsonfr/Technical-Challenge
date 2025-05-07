@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transaction.Domain.Entities;
+using Transaction.Domain.Enums;
 
 namespace Transaction.Application.ViewModels
 {
@@ -14,6 +15,7 @@ namespace Transaction.Application.ViewModels
         public Guid TargetAccountId { get; set; }
         public int TransferTypeId { get; set; }
         public decimal Value { get; set; }
+        public Status status { get; set; }
 
         public static TransactionDTO FromEntity(TransactionEntity transactionEntityDto)
         {
@@ -24,6 +26,7 @@ namespace Transaction.Application.ViewModels
                 TargetAccountId = transactionEntityDto.TargetAccountId,
                 TransferTypeId = transactionEntityDto.TransferTypeId,
                 Value = transactionEntityDto.Value,
+                status = transactionEntityDto.Status
             };
         }
     }

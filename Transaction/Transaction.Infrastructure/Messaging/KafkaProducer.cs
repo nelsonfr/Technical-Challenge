@@ -14,9 +14,9 @@ namespace Transaction.Infrastructure.Messaging
     public class KafkaProducer:IKafkaProducer
     {
         private readonly IProducer<string, string> _producer;
-        public KafkaProducer(IOptions<KafkaSettings> settings)
+        public KafkaProducer(IConfiguration configuration)
         {
-             var config = KafkaHelper.GetDefaultProducerConfig(settings.Value);
+             var config = KafkaHelper.GetDefaultProducerConfig(configuration);
             _producer = new ProducerBuilder<string, string>(config).Build();
         }
 

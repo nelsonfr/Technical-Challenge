@@ -10,18 +10,18 @@ namespace Transaction.Infrastructure.Messaging
 {
     public static class KafkaHelper
     {
-        public static ConsumerConfig GetDetaultConsumerConfig(KafkaSettings settings) =>
+        public static ConsumerConfig GetDetaultConsumerConfig(IConfiguration configuration) =>
             new ConsumerConfig
             {
-                BootstrapServers = settings.BootstrapServers,
-                GroupId = settings.GroupId,
+                BootstrapServers = configuration["Kafka:BootstrapServers"],
+                GroupId = configuration["Kafka:GroupId"],
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-        public static ProducerConfig GetDefaultProducerConfig(KafkaSettings settings) =>
+        public static ProducerConfig GetDefaultProducerConfig(IConfiguration configuration) =>
             new ProducerConfig
             {
-                BootstrapServers = settings.BootstrapServers
+                BootstrapServers = configuration["Kafka:BootstrapServers"]
             };
     }
 }

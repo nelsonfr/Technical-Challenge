@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transaction.Application.DTOs;
 using Transaction.Application.ViewModels;
+using Transaction.Domain.Transactions.Events;
 
 namespace Transaction.Application.Services
 {
@@ -12,5 +13,6 @@ namespace Transaction.Application.Services
     {
         Task<Guid> CreateTransaction(CreateTransactionDTO transactionDTO);
         Task<TransactionDTO> GetTransaction(RetrieveTransactionDTO retrieveTransactionDTO);
+        Task<bool> ProcessFraud(TransactionCreatedEvent transactionCreatedEvent);
     }
 }

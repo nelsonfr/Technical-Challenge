@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -10,26 +11,39 @@ using Transaction.Application.Messaging;
 
 namespace Transaction.Infrastructure.Messaging
 {
-    public class KafkaConsumer:IKafkaConsumer
+    public class KafkaConsumer : BackgroundService
     {
-        private readonly KafkaSettings _settings;
         private readonly IConsumer<string, string> _consumer;
 
-        public KafkaConsumer(IOptions<KafkaSettings> settings)
+        public KafkaConsumer(string[] topics, IConfiguration configuration)
         {
-            _settings = settings.Value;
-            var config = KafkaHelper.GetDetaultConsumerConfig(_settings);
-            var consumer = new ConsumerBuilder<string, string>(config).Build();
-            consumer.Subscribe(_settings.Topics);
-            _consumer = consumer;
-            
+            var config = KafkaHelper.GetDetaultConsumerConfig(configuration);
+            _consumer = new ConsumerBuilder<string, string>(config).Build();
+            _consumer.Subscribe(topics);
         }
 
-        public MessageResult Consume()
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var result = _consumer.Consume();
-            var messageResult = new MessageResult { Timestamp = result.Message.Timestamp.UtcDateTime, Message = result.Message.Value, Key = result.Message.Key, };
-            return messageResult;
+            return Task.Run(async () => {
+                await HandleConsume(stoppingToken);
+                
+            }, stoppingToken);
+        }
+
+        protected async Task HandleConsume(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+
+                var consumeResult = _consumer.Consume(cancellationToken);
+                await ConsumeAsync(new MessageResult { Topic = consumeResult.Topic, Message = consumeResult.Message.Value, Key = consumeResult.Message.Key });
+            }
+            _consumer.Close();
+        }
+
+        protected virtual Task ConsumeAsync(MessageResult messageResult)
+        {
+            return Task.CompletedTask;
         }
     }
 }

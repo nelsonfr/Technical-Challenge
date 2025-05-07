@@ -27,11 +27,7 @@ namespace Transaction.Infrastructure.Repositories
         {
             return await _dbContext.Transactions.ToListAsync(cancellationToken);
         }
-
-        public async Task<IEnumerable<TransactionEntity>> GetAllByIdAsync(Guid id,  CancellationToken cancellationToken)
-        {
-            return await _dbContext.Transactions.Where(x => x.Id == id).ToListAsync(cancellationToken);
-        }
+        
 
         public async Task<TransactionEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
@@ -52,6 +48,18 @@ namespace Transaction.Infrastructure.Repositories
             await _dbContext.SaveNewChangesAsync(CancellationToken.None);
 
             
+        }
+
+
+        public async Task<IEnumerable<TransactionEntity>> GetAllByTargetIdAsync(Guid targetId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Transactions.Where(x => x.TargetAccountId == targetId).ToListAsync(cancellationToken);
+
+        }
+
+        public async Task<IEnumerable<TransactionEntity>> GetAllBySourceIdAsync(Guid sourceId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Transactions.Where(x => x.SourceAccountId == sourceId).ToListAsync(cancellationToken);
         }
     }
 }

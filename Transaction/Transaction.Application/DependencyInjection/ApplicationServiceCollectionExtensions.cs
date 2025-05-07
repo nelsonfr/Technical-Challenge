@@ -26,9 +26,15 @@ namespace Transaction.Application.DependencyInjection
 
             services.AddFluentMediator(builder =>
                 {
+                    //queries
+                    builder.On<GetTransactionQuery>().PipelineAsync().Return<TransactionDTO, TransactionQueryHandler>((handler, request) => handler.GetTransaction(request));
+                    builder.On<GetTransactionsByTargetAccountId24Hours>().PipelineAsync().Return<IEnumerable<TransactionDTO>, TransactionQueryHandler>((handler, request) => handler.GetTransactionsByTargetAccountId24Hours(request));
+                    builder.On<GetTransactionsBySourceAccoundId24Hours>().PipelineAsync().Return<IEnumerable<TransactionDTO>, TransactionQueryHandler>((handler, request) => handler.GetTransactionsBySourceAccountId24Hours(request));
+                    //commands
                     builder.On<CreateNewTransactionCommand>().PipelineAsync().Return<Guid, TransactionCommandHandler>((handler, request) => handler.CreateNewTask(request));
-                    builder.On<GetTransactionQuery>().PipelineAsync().Return<TransactionDTO, TransactionQueryHandler>((handler, request) => handler.GetTask(request));
+                    //events
                     builder.On<TransactionCreatedEvent>().PipelineAsync().Call<TransactionEventHandler>((handler, request) => handler.HandleTransactionCreatedEvent(request));
+                   
                 }
             );
 
