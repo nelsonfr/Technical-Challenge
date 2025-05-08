@@ -2,6 +2,7 @@ using FluentMediator;
 using Transaction.API.Extensions.Middleware;
 using Transaction.Infrastructure.DependencyInjection;
 using Transaction.Application.DependencyInjection;
+using Transaction.API.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 //Adds the different layers
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHostedService<FraudCheckConsumer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

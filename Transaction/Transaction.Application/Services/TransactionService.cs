@@ -47,7 +47,10 @@ namespace Transaction.Application.Services
             var accumulatedByTarget = transactionsByTarget.Where(x => x.status == Domain.Enums.Status.Approved).Sum(_ => _.Value);
 
 
-            return (accumulatedByTarget > 20000 || accumulatedBySource > 20000 || transaction.Value > 2000);
+            var isFraud = (accumulatedByTarget > 20000 || accumulatedBySource > 20000 || transaction.Value > 2000);
+            var transactionFraudCheck = new TransactionFraudCheckedEvent(transactionCreatedEvent.TransactionId, isFraud);
+            await mediator.PublishAsync(transactionFraudCheck);
+            return isFraud;
         }
     }
 }

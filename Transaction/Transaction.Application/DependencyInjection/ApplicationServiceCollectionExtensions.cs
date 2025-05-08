@@ -34,6 +34,7 @@ namespace Transaction.Application.DependencyInjection
                     builder.On<CreateNewTransactionCommand>().PipelineAsync().Return<Guid, TransactionCommandHandler>((handler, request) => handler.CreateNewTask(request));
                     //events
                     builder.On<TransactionCreatedEvent>().PipelineAsync().Call<TransactionEventHandler>((handler, request) => handler.HandleTransactionCreatedEvent(request));
+                    builder.On<TransactionFraudCheckedEvent>().PipelineAsync().Call<TransactionEventHandler>((handler, request) => handler.HandleTransactionFraudCheckedEvent(request));
                    
                 }
             );

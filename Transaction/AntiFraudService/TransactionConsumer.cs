@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Transaction.Application.Messaging;
 using Transaction.Application.Services;
@@ -6,9 +7,19 @@ using Transaction.Infrastructure.Messaging;
 
 namespace AntiFraudService
 {
-    public class TransactionConsumer(IConfiguration configuration, ITransactionService transactionService) : KafkaConsumer(topics, configuration)
+    public class TransactionConsumer:KafkaConsumer
     {
         protected static readonly string[] topics = ["transaction-created"];
+        private readonly ITransactionService _transactionService;
+
+
+        public TransactionConsumer(IConfiguration configuration, IServiceProvider serviceProvider) : base(topics, configuration)
+        {
+            var scope = serviceProvider.CreateScope();
+            _transactionService = scope.ServiceProvider.GetRequiredService<ITransactionService>();
+        }
+
+
 
         protected override async Task ConsumeAsync(MessageResult messageResult)
         {
@@ -26,13 +37,12 @@ namespace AntiFraudService
         private async Task HandleTransactionCreated(string message)
         {
             var orderMessage = JsonConvert.DeserializeObject<TransactionCreatedEvent>(message);
-            var IsFraud = await transactionService.ProcessFraud(orderMessage);
 
-            if (IsFraud)
+            if(orderMessage != null)
             {
-
+                var IsFraud = await _transactionService.ProcessFraud(orderMessage);
             }
-
+           
         }
     }
 }

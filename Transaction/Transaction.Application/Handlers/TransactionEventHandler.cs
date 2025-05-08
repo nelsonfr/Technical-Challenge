@@ -17,5 +17,12 @@ namespace Transaction.Application.Handlers
             var eventMessage = JsonConvert.SerializeObject(transactionCreatedEvent);
             await producer.ProduceAsync("transaction-created", eventMessage);
         }
+
+        public async Task HandleTransactionFraudCheckedEvent(TransactionFraudCheckedEvent transactionFraudCheckedEvent)
+        {
+            var eventMessage = JsonConvert.SerializeObject(transactionFraudCheckedEvent);
+            await producer.ProduceAsync("transaction-fraud-checked", eventMessage);
+        }
+
     }
 }
