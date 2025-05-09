@@ -14,8 +14,8 @@ namespace Transaction.Domain.Transactions.Commands
         public decimal Value { get; set; }
         public CreateNewTransactionCommand(Guid sourceAccountId, Guid targetAccountId, int transferTypeId, decimal value)
         {
-            sourceAccountId = SourceAccountId;
-            targetAccountId = TargetAccountId;
+            SourceAccountId = sourceAccountId;
+            TargetAccountId = targetAccountId;
             TransferTypeId = transferTypeId;
             Value = value;
         }

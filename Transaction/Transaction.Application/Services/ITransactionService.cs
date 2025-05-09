@@ -14,5 +14,6 @@ namespace Transaction.Application.Services
         Task<Guid> CreateTransaction(CreateTransactionDTO transactionDTO);
         Task<TransactionDTO> GetTransaction(RetrieveTransactionDTO retrieveTransactionDTO);
         Task<bool> ProcessFraud(TransactionCreatedEvent transactionCreatedEvent);
+        Task<Guid> UpdateTransactionFraudStatus(TransactionFraudCheckedEvent transactionFraudCheckedEvent);
     }
 }

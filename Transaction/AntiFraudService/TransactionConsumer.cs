@@ -1,5 +1,8 @@
+using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Npgsql.Replication.PgOutput.Messages;
+using System.Text;
 using Transaction.Application.Messaging;
 using Transaction.Application.Services;
 using Transaction.Domain.Transactions.Events;
@@ -31,14 +34,13 @@ namespace AntiFraudService
                     await HandleTransactionCreated(messageResult.Message);
                     break;
             }
-            
         }
 
         private async Task HandleTransactionCreated(string message)
-        {
+        { 
             var orderMessage = JsonConvert.DeserializeObject<TransactionCreatedEvent>(message);
 
-            if(orderMessage != null)
+            if (orderMessage != null)
             {
                 var IsFraud = await _transactionService.ProcessFraud(orderMessage);
             }

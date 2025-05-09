@@ -31,7 +31,8 @@ namespace Transaction.Application.DependencyInjection
                     builder.On<GetTransactionsByTargetAccountId24Hours>().PipelineAsync().Return<IEnumerable<TransactionDTO>, TransactionQueryHandler>((handler, request) => handler.GetTransactionsByTargetAccountId24Hours(request));
                     builder.On<GetTransactionsBySourceAccoundId24Hours>().PipelineAsync().Return<IEnumerable<TransactionDTO>, TransactionQueryHandler>((handler, request) => handler.GetTransactionsBySourceAccountId24Hours(request));
                     //commands
-                    builder.On<CreateNewTransactionCommand>().PipelineAsync().Return<Guid, TransactionCommandHandler>((handler, request) => handler.CreateNewTask(request));
+                    builder.On<CreateNewTransactionCommand>().PipelineAsync().Return<Guid, TransactionCommandHandler>((handler, request) => handler.CreateNewTransaction(request));
+                    builder.On<UpdateTransacionStatusCommand>().PipelineAsync().Return<Guid, TransactionCommandHandler>((handler, request) => handler.UpdateTransactionStatus(request));
                     //events
                     builder.On<TransactionCreatedEvent>().PipelineAsync().Call<TransactionEventHandler>((handler, request) => handler.HandleTransactionCreatedEvent(request));
                     builder.On<TransactionFraudCheckedEvent>().PipelineAsync().Call<TransactionEventHandler>((handler, request) => handler.HandleTransactionFraudCheckedEvent(request));

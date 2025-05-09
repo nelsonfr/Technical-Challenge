@@ -10,6 +10,8 @@ using Transaction.Infrastructure.Factories;
 using Transaction.Application.Messaging;
 using Transaction.Infrastructure.Messaging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Hosting;
+using Transaction.Infrastructure.Messaging.TopicInitializer;
 
 
 namespace Transaction.Infrastructure.DependencyInjection
@@ -26,13 +28,17 @@ namespace Transaction.Infrastructure.DependencyInjection
             services.AddScoped<ITransactionDbContext>(provider =>
                 provider.GetRequiredService<TransactionDbContext>());
 
+
+            services.AddSingleton<KafkaTopicInitializer>();
+            services.AddTransient<IStartupFilter, KafkaStartupFilter>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
-
             services.AddSingleton<IKafkaProducer, KafkaProducer>();
-
             services.AddSingleton<ITransactionFactory, TransactionFactory>();
-
             return services;
         }
+
+
+
+
     }
 }

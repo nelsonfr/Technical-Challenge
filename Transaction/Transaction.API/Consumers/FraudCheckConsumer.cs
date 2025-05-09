@@ -34,7 +34,11 @@ namespace Transaction.API.Consumers
         private async Task HandleFraudCheck(string message)
         {
             var fraudMessage = JsonConvert.DeserializeObject<TransactionFraudCheckedEvent>(message);
-            
+
+            if(fraudMessage != null)
+            {
+                await _transactionService.UpdateTransactionFraudStatus(fraudMessage);
+            }
         }
 
     }

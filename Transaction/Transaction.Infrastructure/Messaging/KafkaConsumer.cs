@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +35,16 @@ namespace Transaction.Infrastructure.Messaging
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-
-                var consumeResult = _consumer.Consume(cancellationToken);
-                await ConsumeAsync(new MessageResult { Topic = consumeResult.Topic, Message = consumeResult.Message.Value, Key = consumeResult.Message.Key });
+                try
+                {
+                    var consumeResult = _consumer.Consume(cancellationToken);
+                    await ConsumeAsync(new MessageResult { Topic = consumeResult.Topic, Message =  JsonConvert.DeserializeObject<string>(consumeResult.Message.Value?? string.Empty), Key = consumeResult.Message.Key });
+                }
+                catch (Exception ex) 
+                { 
+                
+                }
+                
             }
             _consumer.Close();
         }

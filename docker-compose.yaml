@@ -2,7 +2,6 @@ version: "3.7"
 services:
   postgres:
     image: postgres:14
-    container_name: postgres-transactions
     ports:
       - "5432:5432"
     environment:
@@ -10,32 +9,56 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=Transactions
 
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-      - "8080:80"  # pgAdmin will be accessible at http://localhost:8080
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-    depends_on:
-      - postgres
-
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.3
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeper
+    container_name: zookeeper
+    ports:
+      - 2181:2181
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zookeeper:2888:3888
 
   kafka:
-    image: confluentinc/cp-enterprise-kafka:5.5.3
-    depends_on:
-      - zookeeper
+    image: confluentinc/cp-enterprise-kafka:latest
+    hostname: kafka
+    container_name: kafka
+    depends_on: [zookeeper]
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_JMX_PORT: 9991
     ports:
       - 9092:9092
 
+  kafka-init:
+    image: confluentinc/cp-enterprise-kafka:latest
+    depends_on:
+      - kafka
+    command: |
+      /bin/sh -c "
+      echo 'Creating topic...';
+      # Create the topic if it doesn't exist
+      kafka-topics --create --if-not-exists --topic transaction-created --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1;
+      echo 'Topic \"transaction-created\" created (or already exists).';
+
+      kafka-topics --create --if-not-exists --topic transaction-fraud-checked --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1;
+      echo 'Topic \"transaction-fraud-checked\" created (or already exists).';
+
+      kafka-topics --create --if-not-exists --topic test-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1;
+      echo 'Topic \"transaction-fraud-checked\" created (or already exists).';"
+
+     
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80  # pgAdmin will be accessible at http://localhost:8080
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - postgres

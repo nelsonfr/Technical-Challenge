@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transaction.Domain.Exceptions;
 using Transaction.Domain.Repositories;
 using Transaction.Domain.Transactions;
 using Transaction.Domain.Transactions.Commands;
@@ -15,7 +16,7 @@ namespace Transaction.Application.Handlers
                                            ITransactionFactory transactionFactory,
                                            IMediator mediator)
     {
-        public async Task<Guid> CreateNewTask(CreateNewTransactionCommand createNewTransactionCommand)
+        public async Task<Guid> CreateNewTransaction(CreateNewTransactionCommand createNewTransactionCommand)
         {
 
             var entity = transactionFactory.CreateTransactionEntity(new Guid(),
@@ -29,5 +30,15 @@ namespace Transaction.Application.Handlers
             await mediator.PublishAsync(new TransactionCreatedEvent { TransactionId = guid, SourceAccountId = entity.SourceAccountId, TargetAccountId = entity.TargetAccountId });
             return guid;
         }
+
+
+        public async Task<Guid> UpdateTransactionStatus(UpdateTransacionStatusCommand updateTransacionStatusCommand)
+        {
+            var transaction = await transactionRepository.GetByIdAsync(updateTransacionStatusCommand.Id, CancellationToken.None)?? throw new TransactionNotFoundException(updateTransacionStatusCommand.Id, DateTime.UtcNow);
+            transaction.Status = updateTransacionStatusCommand.Status;
+            await transactionRepository.Update(transaction);
+            return transaction.Id;
+        }
+
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transaction.Application.DTOs;
 using Transaction.Application.ViewModels;
+using Transaction.Domain.Enums;
 using Transaction.Domain.Repositories;
 using Transaction.Domain.Transactions.Commands;
 using Transaction.Domain.Transactions.Events;
@@ -51,6 +52,14 @@ namespace Transaction.Application.Services
             var transactionFraudCheck = new TransactionFraudCheckedEvent(transactionCreatedEvent.TransactionId, isFraud);
             await mediator.PublishAsync(transactionFraudCheck);
             return isFraud;
+        }
+
+        public async Task<Guid> UpdateTransactionFraudStatus(TransactionFraudCheckedEvent transactionFraudCheckedEvent)
+        {
+            var status = transactionFraudCheckedEvent.IsFraud? Status.Rejected : Status.Approved;
+            var updateTransactionStatusCommand = new UpdateTransacionStatusCommand(transactionFraudCheckedEvent.TransactionId, status);
+            return await mediator.SendAsync<Guid>(updateTransactionStatusCommand);
+
         }
     }
 }
