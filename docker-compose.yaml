@@ -32,26 +32,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_JMX_PORT: 9991
     ports:
-      - 9092:9092
-
-  kafka-init:
-    image: confluentinc/cp-enterprise-kafka:latest
-    depends_on:
-      - kafka
-    command: |
-      /bin/sh -c "
-      echo 'Creating topic...';
-      # Create the topic if it doesn't exist
-      kafka-topics --create --if-not-exists --topic transaction-created --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1;
-      echo 'Topic \"transaction-created\" created (or already exists).';
-
-      kafka-topics --create --if-not-exists --topic transaction-fraud-checked --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1;
-      echo 'Topic \"transaction-fraud-checked\" created (or already exists).';
-
-      kafka-topics --create --if-not-exists --topic test-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1;
-      echo 'Topic \"transaction-fraud-checked\" created (or already exists).';"
-
-     
+      - 9092:9092     
 
   pgadmin:
     image: dpage/pgadmin4
@@ -62,3 +43,21 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
     depends_on:
       - postgres
+
+  transaction:
+    build:
+      context: Transaction/
+      dockerfile: ./Transaction.API/Dockerfile
+    depends_on:
+      - kafka
+      - postgres
+ 
+  antifraud:
+    build:
+      context: Transaction/
+      dockerfile: ./AntiFraudService/Dockerfile
+    depends_on:
+      - kafka
+      - transaction
+    ports:
+      - "8000:5000"
